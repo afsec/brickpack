@@ -1,3 +1,8 @@
+
+pub type AppResult<T> = anyhow::Result<T>;
+
+
+///////////////////////////
 pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
