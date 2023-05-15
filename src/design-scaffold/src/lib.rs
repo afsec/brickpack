@@ -1,4 +1,5 @@
 pub type AppResult<T> = anyhow::Result<T>;
+pub type AppError = anyhow::Error;
 
 ///////////////////////////
 pub fn add(left: usize, right: usize) -> usize {

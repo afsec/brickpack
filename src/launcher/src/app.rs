@@ -1,8 +1,9 @@
 use anyhow::anyhow;
-use clap::{Arg, Command};
-use design_scaffold::AppResult;
+use clap::{Arg, ArgMatches, Command};
+use design_scaffold::{AppError, AppResult};
 use std::net::SocketAddr;
 use std::path::PathBuf;
+use std::str::FromStr;
 
 #[derive(Debug, Default)]
 pub(crate) struct App {
@@ -119,6 +120,8 @@ impl PreApp {
 
         let matches = cli.get_matches();
 
+        let tls_config = AppTlsConfig::from_matches(&matches)?;
+
         // let file_path =
         //     matches.get_one::<PathBuf>("dataset-name").ok_or(anyhow!("Argument not found"))?;
 
@@ -127,7 +130,18 @@ impl PreApp {
         // let string_from_file = fs::read_to_string(file_path)?;
         // dbg!(string_from_file);
 
-        let app = App::default();
+        let socket = AppSocket::from_matches(&matches)?;
+
+        let app = App {
+            config: AppConfig {
+                dev_mode: false,
+                show_endpoints: false,
+                tokio_console: false,
+                socket,
+                tls_config,
+                auto_generate_tls_cert_hostname: None,
+            },
+        };
         Ok(app)
     }
 
@@ -142,19 +156,71 @@ struct AppConfig {
     show_endpoints: bool,
     tokio_console: bool,
     socket: AppSocket,
-    tls_cert_path: PathBuf,
-    tls_key_path: PathBuf,
-    auto_generate_tls_cert_hostname: String,
+    tls_config: Option<AppTlsConfig>,
+    auto_generate_tls_cert_hostname: Option<String>,
 }
 
 #[derive(Debug)]
 struct AppSocket(SocketAddr);
+impl FromStr for AppSocket {
+    type Err = AppError;
 
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        s.parse()
+    }
+}
 impl Default for AppSocket {
     fn default() -> Self {
         use std::net::IpAddr;
         use std::net::Ipv4Addr;
         let socket = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), 8080);
         Self(socket)
+    }
+}
+impl AppSocket {
+    fn from_matches(matches: &ArgMatches) -> AppResult<Self> {
+        use std::net::IpAddr;
+        use std::net::Ipv4Addr;
+        let maybe_ipv4_address = matches.get_one::<Ipv4Addr>("ipv4_address");
+        let maybe_ipv4_port = matches.get_one::<u16>("ipv4_port");
+
+        let socket = match (maybe_ipv4_address, maybe_ipv4_port) {
+            (Some(inner_ipv4_address), Some(inner_ipv4_port)) => {
+                let socket_addr =
+                    SocketAddr::new(IpAddr::V4(*inner_ipv4_address), *inner_ipv4_port);
+                Ok(AppSocket(socket_addr))
+            }
+            (None, None) => Ok(AppSocket::default()),
+            _ => Err(anyhow!("Both ipv4_address and ipv4_port need to be defined together")),
+        }?;
+
+        Ok(socket)
+    }
+}
+
+#[derive(Debug)]
+struct AppTlsConfig {
+    tls_cert_path: PathBuf,
+    tls_key_path: PathBuf,
+}
+
+impl AppTlsConfig {
+    fn from_matches(matches: &ArgMatches) -> AppResult<Option<Self>> {
+        let maybe_tls_key_path = matches.get_one::<PathBuf>("tls_key_path");
+        let maybe_tls_cert_path = matches.get_one::<PathBuf>("tls_cert_path");
+
+        let maybe_app_tls_config = match (maybe_tls_key_path, maybe_tls_cert_path) {
+            (Some(inner_tls_key_path), Some(inner_tls_cert_path)) => Some(AppTlsConfig {
+                tls_cert_path: inner_tls_cert_path.to_path_buf(),
+                tls_key_path: inner_tls_key_path.to_path_buf(),
+            }),
+            (None, None) => None,
+            _ => {
+                return Err(anyhow!(
+                    "Both tls_key_path and tls_cert_path need to be defined together"
+                ))
+            }
+        };
+        Ok(maybe_app_tls_config)
     }
 }
