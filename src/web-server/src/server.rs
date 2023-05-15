@@ -24,7 +24,8 @@ pub async fn run(config: WebServerConfig) -> AppResult<()> {
     let new_oid = oid_reactor.generate().await?;
 
     println!("[{}:{}] new_oid: [{new_oid}]", file!(), line!());
-    let app = Router::new()
+
+    let router = Router::new()
         // `GET /` goes to `root`
         .route("/", get(root))
         // `POST /users` goes to `create_user`
@@ -32,7 +33,7 @@ pub async fn run(config: WebServerConfig) -> AppResult<()> {
 
     let socket = config.socket();
     tracing::info!("Listening on http://{}", socket);
-    Server::bind(&socket).serve(app.into_make_service()).await?;
+    Server::bind(&socket).serve(router.into_make_service()).await?;
 
     Ok(())
 }
