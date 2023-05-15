@@ -15,6 +15,12 @@ pub struct WebServerConfig {
     pub auto_generate_tls_cert_hostname: Option<String>,
 }
 
+impl WebServerConfig {
+    pub fn socket(&self) -> SocketAddr {
+        self.socket
+    }
+}
+
 #[derive(Debug)]
 pub struct WebServerTlsConfig {
     pub tls_cert_path: PathBuf,
