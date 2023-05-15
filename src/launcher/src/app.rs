@@ -1,9 +1,11 @@
 use anyhow::anyhow;
 use clap::{Arg, ArgMatches, Command};
-use design_scaffold::{AppError, AppResult};
+
 use std::net::SocketAddr;
-use std::path::PathBuf;
 use std::str::FromStr;
+
+use design_scaffold::{AppError, AppResult};
+use web_server::{WebServer, WebServerConfig, WebServerTlsConfig};
 
 #[derive(Debug, Default)]
 pub(crate) struct App {
@@ -104,10 +106,15 @@ impl App {
         PreApp { cli: Some(clap_command) }
     }
     pub(crate) async fn run(self) -> AppResult<()> {
-        use web_server::WebServer;
         let app_config = self.config;
-        dbg!(app_config);
-        WebServer::new().await?.run().await
+        dbg!(&app_config);
+        if app_config.show_endpoints {
+            println!("RUN: Show endpoints");
+            Ok(())
+        } else {
+            let config = WebServerConfig::from(app_config);
+            WebServer::new(config).run().await
+        }
     }
 }
 pub(crate) struct PreApp {
@@ -119,7 +126,7 @@ impl PreApp {
 
         let matches = cli.get_matches();
 
-        let tls_config = AppTlsConfig::from_matches(&matches)?;
+        let tls_config = WebServerTlsConfig::from_matches(&matches)?;
 
         let auto_generate_tls_cert_hostname =
             match matches.get_one::<String>("auto_generate_tls_cert") {
@@ -169,11 +176,11 @@ impl PreApp {
 
 #[derive(Debug, Default)]
 struct AppConfig {
-    dev_mode: bool,
     show_endpoints: bool,
+    dev_mode: bool,
     tokio_console: bool,
     socket: AppSocket,
-    tls_config: Option<AppTlsConfig>,
+    tls_config: Option<WebServerTlsConfig>,
     auto_generate_tls_cert_hostname: Option<String>,
 }
 
@@ -195,6 +202,9 @@ impl Default for AppSocket {
     }
 }
 impl AppSocket {
+    fn take_inner(self) -> SocketAddr {
+        self.0
+    }
     fn from_matches(matches: &ArgMatches) -> AppResult<Self> {
         use std::net::IpAddr;
         use std::net::Ipv4Addr;
@@ -215,29 +225,22 @@ impl AppSocket {
     }
 }
 
-#[derive(Debug)]
-struct AppTlsConfig {
-    tls_cert_path: PathBuf,
-    tls_key_path: PathBuf,
-}
-
-impl AppTlsConfig {
-    fn from_matches(matches: &ArgMatches) -> AppResult<Option<Self>> {
-        let maybe_tls_key_path = matches.get_one::<PathBuf>("tls_key_path");
-        let maybe_tls_cert_path = matches.get_one::<PathBuf>("tls_cert_path");
-
-        let maybe_app_tls_config = match (maybe_tls_key_path, maybe_tls_cert_path) {
-            (Some(inner_tls_key_path), Some(inner_tls_cert_path)) => Some(AppTlsConfig {
-                tls_cert_path: inner_tls_cert_path.to_path_buf(),
-                tls_key_path: inner_tls_key_path.to_path_buf(),
-            }),
-            (None, None) => None,
-            _ => {
-                return Err(anyhow!(
-                    "Both tls_key_path and tls_cert_path need to be defined together"
-                ))
-            }
-        };
-        Ok(maybe_app_tls_config)
+impl From<AppConfig> for WebServerConfig {
+    fn from(app_config: AppConfig) -> Self {
+        let AppConfig {
+            dev_mode,
+            tokio_console,
+            socket,
+            tls_config,
+            auto_generate_tls_cert_hostname,
+            ..
+        } = app_config;
+        Self {
+            dev_mode,
+            tokio_console,
+            socket: socket.take_inner(),
+            tls_config,
+            auto_generate_tls_cert_hostname,
+        }
     }
 }

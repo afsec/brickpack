@@ -17,7 +17,7 @@ path = "src/main.rs"
 
 [dependencies]
 anyhow = { workspace = true }
-clap = { version = "4.2.7", features = ["cargo", "env"] }
+clap = { workspace = true }
 tokio = { version = "1.28.1", features = ["full", "tracing"] }
 design-scaffold = { path = "../design-scaffold" }
 web-server = { path = "../web-server" }

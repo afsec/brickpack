@@ -28,9 +28,9 @@ tool = "../misc/elm"
 
 [workspace.dependencies]
 anyhow = "1.0.71"
+clap = { version = "4.2.7", features = ["cargo", "env"] }
 tracing = "0.1.37"
 serde = { version = "1.0.163", features = ["derive"] }
-
 
 
 [profile.dev]
