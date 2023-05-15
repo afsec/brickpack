@@ -46,9 +46,5 @@ use design_scaffold::AppResult;
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
-    App::new().load_cli()?.run().await?;
-
-    // app.plot()?;
-    println!("Hello, world!");
-    Ok(())
+    App::new().load_cli()?.run().await
 }

@@ -19,6 +19,8 @@ impl WebServer {
 
         dbg!(config);
 
+        println!("[{}:{}] Hello, world!", file!(), line!());
+
         Ok(())
     }
 }
