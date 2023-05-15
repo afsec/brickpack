@@ -46,8 +46,7 @@ use design_scaffold::AppResult;
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
-    let mut app = App::new();
-    app.load()?;
+    App::new().load_cli()?.run().await?;
 
     // app.plot()?;
     println!("Hello, world!");
