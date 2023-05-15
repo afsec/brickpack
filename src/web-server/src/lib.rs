@@ -2,7 +2,7 @@ use design_scaffold::AppResult;
 
 #[derive(Debug, Default)]
 pub struct WebServer {
-    config: (),
+    // config: (),
 }
 
 impl WebServer {

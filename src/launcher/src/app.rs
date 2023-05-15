@@ -4,7 +4,7 @@ use design_scaffold::AppResult;
 
 #[derive(Debug, Default)]
 pub(crate) struct App {
-    config: (),
+    // config: (),
 }
 
 impl App {
