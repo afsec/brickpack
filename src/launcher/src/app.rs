@@ -126,6 +126,9 @@ impl PreApp {
 
         let matches = cli.get_matches();
 
+        // * Tracing
+        start_tracing(&matches);
+
         let tls_config = WebServerTlsConfig::from_matches(&matches)?;
 
         let auto_generate_tls_cert_hostname =
@@ -142,26 +145,11 @@ impl PreApp {
 
         let socket = AppSocket::from_matches(&matches)?;
 
-        let dev_mode = match matches.get_one::<bool>("dev_mode") {
-            Some(b) => *b,
-            None => false,
-        };
-
-        let show_endpoints = match matches.get_one::<bool>("show_endpoints") {
-            Some(b) => *b,
-            None => false,
-        };
-
-        let tokio_console = match matches.get_one::<bool>("tokio_console") {
-            Some(b) => *b,
-            None => false,
-        };
-
         Ok(App {
             config: AppConfig {
-                dev_mode,
-                show_endpoints,
-                tokio_console,
+                dev_mode: matches.get_flag("dev_mode"),
+                show_endpoints: matches.get_flag("show_endpoints"),
+                tokio_console: matches.get_flag("tokio_console"),
                 socket,
                 tls_config,
                 auto_generate_tls_cert_hostname,
@@ -242,5 +230,34 @@ impl From<AppConfig> for WebServerConfig {
             tls_config,
             auto_generate_tls_cert_hostname,
         }
+    }
+}
+
+fn start_tracing(clap_matches: &ArgMatches) {
+    use std::env;
+    // let default_loglevel = "applications-endpoints=debug";
+    let default_loglevel = "info";
+    let mut was_loglevel_set_at_startup = true;
+    if env::var_os("RUST_LOG").is_none() {
+        env::set_var("RUST_LOG", default_loglevel);
+        was_loglevel_set_at_startup = false;
+    }
+
+    let startup_message = format!("Starting App [Brickpack v{}]:", env!("CARGO_PKG_VERSION"));
+    if clap_matches.get_flag("tokio_console") {
+        // if clap_matches.is_present("tokio_console") {
+        console_subscriber::init();
+        tracing::info!("{}", startup_message);
+        tracing::info!("Tokio-console started at http://127.0.0.1:6669");
+    } else {
+        tracing_subscriber::fmt::init();
+        tracing::info!("{}", startup_message);
+        tracing::info!("Tracing started successfully");
+    }
+    if !was_loglevel_set_at_startup {
+        tracing::info!(
+            "RUST_LOG was not set. Setting default value: RUST_LOG={}",
+            &default_loglevel
+        );
     }
 }

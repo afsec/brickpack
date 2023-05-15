@@ -16,9 +16,14 @@ path = "src/main.rs"
 
 
 [dependencies]
-anyhow = { workspace = true }
-clap = { workspace = true }
-tokio = { version = "1.28.1", features = ["full", "tracing"] }
 design-scaffold = { path = "../design-scaffold" }
 web-server = { path = "../web-server" }
+
+anyhow = { workspace = true }
+clap = { workspace = true }
+tracing = { workspace = true }
+
+tokio = { version = "1.28.1", features = ["full", "tracing"] }
 hostname-validator = "1.1.1"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+console-subscriber = "0.1.9"
