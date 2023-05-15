@@ -107,13 +107,13 @@ impl App {
     }
     pub(crate) async fn run(self) -> AppResult<()> {
         let app_config = self.config;
-        dbg!(&app_config);
+
         if app_config.show_endpoints {
             println!("RUN: Show endpoints");
             Ok(())
         } else {
-            let config = WebServerConfig::from(app_config);
-            WebServer::new(config).run().await
+            let wb_config = WebServerConfig::from(app_config);
+            WebServer::new(wb_config).run().await
         }
     }
 }
