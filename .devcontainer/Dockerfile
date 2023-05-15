@@ -8,7 +8,7 @@ RUN apt -yq update && \
     build-essential pkg-config \
     libssl-dev llvm-dev liblmdb-dev \
     clang cmake rsync \
-    libunwind-dev \
+    libunwind-dev musl-tools\
     binaryen wabt \
     tmux unzip vim \
     tree iproute2
