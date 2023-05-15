@@ -4,7 +4,7 @@ edition = "2021"
 rust-version = "1.69.0"
 
 name = "design-scaffold"
-version = "0.0.2"
+version = "0.0.8"
 
 authors = ["https://github.com/afsec"]
 license = "MIT"

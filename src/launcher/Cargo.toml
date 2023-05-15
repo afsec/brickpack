@@ -4,7 +4,7 @@ edition = "2021"
 rust-version = "1.69.0"
 
 name = "launcher"
-version = "0.0.2"
+version = "0.1.2"
 description = "Just another updated version of Brickpack scaffold system for Rust"
 authors = ["https://github.com/afsec"]
 license = "MIT"
