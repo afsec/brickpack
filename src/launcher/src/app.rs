@@ -116,12 +116,24 @@ impl PreApp {
     pub(crate) fn load_cli(self) -> AppResult<App> {
         use std::fs;
         use std::path::PathBuf;
+
         let cli = self.take_cli().ok_or(anyhow!("CLI not defined"))?;
 
         let matches = cli.get_matches();
 
         let tls_config = AppTlsConfig::from_matches(&matches)?;
 
+        let auto_generate_tls_cert_hostname =
+            match matches.get_one::<String>("auto_generate_tls_cert") {
+                Some(possible_hostname) => {
+                    use std::ops::Not;
+                    if hostname_validator::is_valid(possible_hostname).not() {
+                        return Err(anyhow!("Invalid hostname for auto_generate_tls_cert"));
+                    }
+                    Some(possible_hostname.clone())
+                }
+                None => None,
+            };
         // let file_path =
         //     matches.get_one::<PathBuf>("dataset-name").ok_or(anyhow!("Argument not found"))?;
 
@@ -139,7 +151,7 @@ impl PreApp {
                 tokio_console: false,
                 socket,
                 tls_config,
-                auto_generate_tls_cert_hostname: None,
+                auto_generate_tls_cert_hostname,
             },
         };
         Ok(app)
