@@ -5,7 +5,10 @@ use std::net::SocketAddr;
 use std::str::FromStr;
 
 use design_scaffold::{AppError, AppResult};
-use web_server::{WebServer, WebServerConfig, WebServerTlsConfig};
+use web_server::{
+    config::{WebServerConfig, WebServerTlsConfig},
+    WebServer,
+};
 
 #[derive(Debug, Default)]
 pub(crate) struct App {

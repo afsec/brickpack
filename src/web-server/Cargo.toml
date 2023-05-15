@@ -1,10 +1,22 @@
 [package]
 publish = false
-name = "web-server"
-version = "0.0.1"
 edition = "2021"
+rust-version = "1.69.0"
+
+name = "web-server"
+version = "0.0.3"
+
 
 [dependencies]
 anyhow = { workspace = true }
 clap = { workspace = true }
+
 design-scaffold = { path = "../design-scaffold" }
+
+axum = { version = "0.6.18", features = [
+    "tracing",
+    "ws",
+    "http2",
+    "headers",
+    "multipart",
+] }
