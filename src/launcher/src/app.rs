@@ -31,6 +31,7 @@ impl App {
                     .short('e')
                     .long("endpoints")
                     .help("Show endpoint names")
+                    .num_args(0)
                     .exclusive(true),
             )
             .arg(
@@ -114,9 +115,6 @@ pub(crate) struct PreApp {
 }
 impl PreApp {
     pub(crate) fn load_cli(self) -> AppResult<App> {
-        use std::fs;
-        use std::path::PathBuf;
-
         let cli = self.take_cli().ok_or(anyhow!("CLI not defined"))?;
 
         let matches = cli.get_matches();
@@ -134,27 +132,34 @@ impl PreApp {
                 }
                 None => None,
             };
-        // let file_path =
-        //     matches.get_one::<PathBuf>("dataset-name").ok_or(anyhow!("Argument not found"))?;
-
-        // // dbg!(file_path);
-
-        // let string_from_file = fs::read_to_string(file_path)?;
-        // dbg!(string_from_file);
 
         let socket = AppSocket::from_matches(&matches)?;
 
-        let app = App {
+        let dev_mode = match matches.get_one::<bool>("dev_mode") {
+            Some(b) => *b,
+            None => false,
+        };
+
+        let show_endpoints = match matches.get_one::<bool>("show_endpoints") {
+            Some(b) => *b,
+            None => false,
+        };
+
+        let tokio_console = match matches.get_one::<bool>("tokio_console") {
+            Some(b) => *b,
+            None => false,
+        };
+
+        Ok(App {
             config: AppConfig {
-                dev_mode: false,
-                show_endpoints: false,
-                tokio_console: false,
+                dev_mode,
+                show_endpoints,
+                tokio_console,
                 socket,
                 tls_config,
                 auto_generate_tls_cert_hostname,
             },
-        };
-        Ok(app)
+        })
     }
 
     pub(crate) fn take_cli(self) -> Option<Command> {
