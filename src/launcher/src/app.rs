@@ -1,10 +1,12 @@
 use anyhow::anyhow;
 use clap::{Arg, Command};
 use design_scaffold::AppResult;
+use std::net::SocketAddr;
+use std::path::PathBuf;
 
 #[derive(Debug, Default)]
 pub(crate) struct App {
-    // config: (),
+    config: AppConfig,
 }
 
 impl App {
@@ -24,7 +26,7 @@ impl App {
             //         .num_args(1),
             // )
             .arg(
-                Arg::new("endpoints")
+                Arg::new("show_endpoints")
                     .short('e')
                     .long("endpoints")
                     .help("Show endpoint names")
@@ -101,6 +103,8 @@ impl App {
     }
     pub(crate) async fn run(self) -> AppResult<()> {
         use web_server::WebServer;
+        let app_config = self.config;
+        dbg!(app_config);
         WebServer::new().await?.run().await
     }
 }
@@ -115,18 +119,42 @@ impl PreApp {
 
         let matches = cli.get_matches();
 
-        let file_path =
-            matches.get_one::<PathBuf>("dataset-name").ok_or(anyhow!("Argument not found"))?;
+        // let file_path =
+        //     matches.get_one::<PathBuf>("dataset-name").ok_or(anyhow!("Argument not found"))?;
 
-        // dbg!(file_path);
+        // // dbg!(file_path);
 
-        let string_from_file = fs::read_to_string(file_path)?;
-        dbg!(string_from_file);
+        // let string_from_file = fs::read_to_string(file_path)?;
+        // dbg!(string_from_file);
+
         let app = App::default();
         Ok(app)
     }
 
     pub(crate) fn take_cli(self) -> Option<Command> {
         self.cli
+    }
+}
+
+#[derive(Debug, Default)]
+struct AppConfig {
+    dev_mode: bool,
+    show_endpoints: bool,
+    tokio_console: bool,
+    socket: AppSocket,
+    tls_cert_path: PathBuf,
+    tls_key_path: PathBuf,
+    auto_generate_tls_cert_hostname: String,
+}
+
+#[derive(Debug)]
+struct AppSocket(SocketAddr);
+
+impl Default for AppSocket {
+    fn default() -> Self {
+        use std::net::IpAddr;
+        use std::net::Ipv4Addr;
+        let socket = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), 8080);
+        Self(socket)
     }
 }
