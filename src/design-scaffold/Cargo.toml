@@ -10,7 +10,5 @@ authors = ["https://github.com/afsec"]
 license = "MIT"
 
 
-
-
 [dependencies]
-anyhow = "1.0.71"
+anyhow = { workspace = true }

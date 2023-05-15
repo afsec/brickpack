@@ -5,7 +5,7 @@ rust-version = "1.69.0"
 
 name = "launcher"
 version = "0.0.2"
-
+description = "Just another updated version of Brickpack scaffold system for Rust"
 authors = ["https://github.com/afsec"]
 license = "MIT"
 
@@ -16,8 +16,8 @@ path = "src/main.rs"
 
 
 [dependencies]
+anyhow = { workspace = true }
 clap = { version = "4.2.7", features = ["cargo", "env"] }
 tokio = { version = "1.28.1", features = ["full", "tracing"] }
 design-scaffold = { path = "../design-scaffold" }
 web-server = { path = "../web-server" }
-

@@ -39,14 +39,15 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![cfg_attr(test, allow(clippy::float_cmp))]
 
+mod app;
 
+use app::App;
 use design_scaffold::AppResult;
-// use app::App;
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
-    // let mut app = App::new();
-    // app.load()?;
+    let mut app = App::new();
+    app.load()?;
 
     // app.plot()?;
     println!("Hello, world!");
