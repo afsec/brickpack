@@ -7,7 +7,7 @@ use crate::config::WebServerConfig;
 
 use axum::{
     http::StatusCode,
-    response::IntoResponse,
+    response::{Html, IntoResponse},
     routing::{get, post},
     Json, Router, Server,
 };
@@ -39,8 +39,8 @@ pub async fn run(config: WebServerConfig) -> AppResult<()> {
 }
 
 // basic handler that responds with a static string
-async fn root() -> &'static str {
-    "<h1>It works!</h1>"
+async fn root() -> Html<String> {
+    Html("<h1>It works!</h1>".into())
 }
 
 async fn create_user(
