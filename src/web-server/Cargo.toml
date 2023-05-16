@@ -25,3 +25,4 @@ axum = { version = "0.6.18", features = [
     "headers",
     "multipart",
 ] }
+hostname-validator = "1.1.1"

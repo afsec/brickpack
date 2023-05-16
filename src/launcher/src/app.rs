@@ -1,12 +1,8 @@
-use anyhow::anyhow;
-use clap::{Arg, ArgMatches, Command};
+use clap::{Arg, ArgMatches, Command, ValueHint};
 
-use std::net::SocketAddr;
-use std::str::FromStr;
-
-use design_scaffold::{AppError, AppResult};
+use design_scaffold::AppResult;
 use web_server::{
-    config::{WebServerConfig, WebServerTlsConfig},
+    config::{WebServerConfig, WebServerSocket, WebServerTlsConfig, WebServerTlsHostname},
     WebServer,
 };
 
@@ -17,7 +13,7 @@ pub(crate) struct App {
 
 impl App {
     pub(crate) fn new() -> PreApp {
-        let clap_command = Command::new(clap::crate_name!())
+        let cli = Command::new(clap::crate_name!())
             .version(clap::crate_version!())
             .author(clap::crate_authors!())
             .about(clap::crate_description!())
@@ -79,6 +75,8 @@ impl App {
                 Arg::new("tls_cert_path")
                     .long("tls-cert-path")
                     .value_name("CERT_PATH")
+                    .value_hint(ValueHint::FilePath)
+                    // .value_parser(clap::builder::ValueParser::new(dataset_file_parse_wrap))
                     .require_equals(true)
                     .num_args(1)
                     .help("TLS certificate file")
@@ -89,6 +87,8 @@ impl App {
                 Arg::new("tls_key_path")
                     .long("tls-key-path")
                     .value_name("KEY_PATH")
+                    .value_hint(ValueHint::FilePath)
+                    // .value_parser(clap::builder::ValueParser::new(dataset_file_parse_wrap))
                     .require_equals(true)
                     .num_args(1)
                     .help("TLS private key file")
@@ -99,6 +99,7 @@ impl App {
                 Arg::new("auto_generate_tls_cert")
                     .long("auto-tls-for-hostname")
                     .value_name("HOSTNAME")
+                    .value_hint(ValueHint::Hostname)
                     .require_equals(true)
                     .num_args(1)
                     .help("Hostname for auto-generated TLS cert")
@@ -106,7 +107,7 @@ impl App {
                     .required(false),
             )
             ;
-        PreApp { cli: Some(clap_command) }
+        PreApp { cli }
     }
     pub(crate) async fn run(self) -> AppResult<()> {
         let app_config = self.config;
@@ -121,32 +122,20 @@ impl App {
     }
 }
 pub(crate) struct PreApp {
-    cli: Option<Command>,
+    cli: Command,
 }
 impl PreApp {
     pub(crate) fn load_cli(self) -> AppResult<App> {
-        let cli = self.take_cli().ok_or(anyhow!("CLI not defined"))?;
-
-        let matches = cli.get_matches();
+        let matches = self.cli.get_matches();
 
         // * Tracing
         start_tracing(&matches);
 
         let tls_config = WebServerTlsConfig::from_matches(&matches)?;
 
-        let auto_generate_tls_cert_hostname =
-            match matches.get_one::<String>("auto_generate_tls_cert") {
-                Some(possible_hostname) => {
-                    use std::ops::Not;
-                    if hostname_validator::is_valid(possible_hostname).not() {
-                        return Err(anyhow!("Invalid hostname for auto_generate_tls_cert"));
-                    }
-                    Some(possible_hostname.clone())
-                }
-                None => None,
-            };
+        let auto_generate_tls_cert_hostname = WebServerTlsHostname::from_matches(&matches)?;
 
-        let socket = AppSocket::from_matches(&matches)?;
+        let socket = WebServerSocket::from_matches(&matches)?;
 
         Ok(App {
             config: AppConfig {
@@ -159,10 +148,6 @@ impl PreApp {
             },
         })
     }
-
-    pub(crate) fn take_cli(self) -> Option<Command> {
-        self.cli
-    }
 }
 
 #[derive(Debug, Default)]
@@ -170,50 +155,9 @@ struct AppConfig {
     show_endpoints: bool,
     dev_mode: bool,
     tokio_console: bool,
-    socket: AppSocket,
+    socket: WebServerSocket,
     tls_config: Option<WebServerTlsConfig>,
-    auto_generate_tls_cert_hostname: Option<String>,
-}
-
-#[derive(Debug)]
-struct AppSocket(SocketAddr);
-impl FromStr for AppSocket {
-    type Err = AppError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        s.parse()
-    }
-}
-impl Default for AppSocket {
-    fn default() -> Self {
-        use std::net::IpAddr;
-        use std::net::Ipv4Addr;
-        let socket = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), 8080);
-        Self(socket)
-    }
-}
-impl AppSocket {
-    fn take_inner(self) -> SocketAddr {
-        self.0
-    }
-    fn from_matches(matches: &ArgMatches) -> AppResult<Self> {
-        use std::net::IpAddr;
-        use std::net::Ipv4Addr;
-        let maybe_ipv4_address = matches.get_one::<Ipv4Addr>("ipv4_address");
-        let maybe_ipv4_port = matches.get_one::<u16>("ipv4_port");
-
-        let socket = match (maybe_ipv4_address, maybe_ipv4_port) {
-            (Some(inner_ipv4_address), Some(inner_ipv4_port)) => {
-                let socket_addr =
-                    SocketAddr::new(IpAddr::V4(*inner_ipv4_address), *inner_ipv4_port);
-                Ok(AppSocket(socket_addr))
-            }
-            (None, None) => Ok(AppSocket::default()),
-            _ => Err(anyhow!("Both ipv4_address and ipv4_port need to be defined together")),
-        }?;
-
-        Ok(socket)
-    }
+    auto_generate_tls_cert_hostname: Option<WebServerTlsHostname>,
 }
 
 impl From<AppConfig> for WebServerConfig {
@@ -226,13 +170,7 @@ impl From<AppConfig> for WebServerConfig {
             auto_generate_tls_cert_hostname,
             ..
         } = app_config;
-        Self {
-            dev_mode,
-            tokio_console,
-            socket: socket.take_inner(),
-            tls_config,
-            auto_generate_tls_cert_hostname,
-        }
+        Self { dev_mode, tokio_console, socket, tls_config, auto_generate_tls_cert_hostname }
     }
 }
 

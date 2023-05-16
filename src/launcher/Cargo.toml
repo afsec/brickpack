@@ -24,6 +24,5 @@ clap = { workspace = true }
 tracing = { workspace = true }
 tokio = { workspace = true }
 
-hostname-validator = "1.1.1"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
 console-subscriber = "0.1.9"
