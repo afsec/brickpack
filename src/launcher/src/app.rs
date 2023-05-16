@@ -1,4 +1,6 @@
-use clap::{Arg, ArgMatches, Command, ValueHint};
+use std::{net::Ipv4Addr, path::PathBuf};
+
+use clap::{value_parser, Arg, ArgMatches, Command, ValueHint};
 
 use design_scaffold::AppResult;
 use web_server::{
@@ -39,6 +41,7 @@ impl App {
                 Arg::new("ipv4_address")
                     .long("ipv4-address")
                     .value_name("IPV4_ADDRESS")
+                    .value_parser(value_parser!(Ipv4Addr))
                     .require_equals(true)
                     .help("IPv4 address to listen")
                     .env("IPV4_ADDRESS")
@@ -49,6 +52,7 @@ impl App {
                 Arg::new("ipv4_port")
                     .long("ipv4-port")
                     .value_name("IPV4_PORT")
+                    .value_parser(value_parser!(u16))
                     .require_equals(true)
                     .help("Port number to listen")
                     .env("IPV4_PORT")
@@ -76,7 +80,7 @@ impl App {
                     .long("tls-cert-path")
                     .value_name("CERT_PATH")
                     .value_hint(ValueHint::FilePath)
-                    // .value_parser(clap::builder::ValueParser::new(dataset_file_parse_wrap))
+                    .value_parser(value_parser!(PathBuf))
                     .require_equals(true)
                     .num_args(1)
                     .help("TLS certificate file")
@@ -88,7 +92,7 @@ impl App {
                     .long("tls-key-path")
                     .value_name("KEY_PATH")
                     .value_hint(ValueHint::FilePath)
-                    // .value_parser(clap::builder::ValueParser::new(dataset_file_parse_wrap))
+                    .value_parser(value_parser!(PathBuf))
                     .require_equals(true)
                     .num_args(1)
                     .help("TLS private key file")
