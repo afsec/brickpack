@@ -40,7 +40,7 @@ pub async fn run(config: WebServerConfig) -> AppResult<()> {
 
 // basic handler that responds with a static string
 async fn root() -> &'static str {
-    "Hello, World!"
+    "<h1>It works!</h1>"
 }
 
 async fn create_user(
