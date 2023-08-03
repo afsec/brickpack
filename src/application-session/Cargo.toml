@@ -1,0 +1,17 @@
+[package]
+name = "application-session"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chrono = "0.4.19"
+cookie = "0.16.0"
+sha2 = "0.10.2"
+time = { version = "0.3.11", features = ["std"] }
+tower-cookies = "0.7.0"
+tracing = "0.1.35"
+ulid = { version = "0.6.0", features = ["serde"] }
+
+design-scaffold = { path = "../design-scaffold" }

@@ -1,0 +1,1 @@
+web: IPV4_ADDRESS=0.0.0.0 IPV4_PORT=$PORT bin/brickpack-2022

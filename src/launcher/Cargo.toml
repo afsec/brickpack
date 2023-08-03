@@ -1,0 +1,21 @@
+[package]
+edition = "2021"
+rust-version = "1.58.0"
+name = "launcher"
+version = "0.6.3"
+authors = ["Antonio Costa - https://github.com/afsec"]
+license = "MIT"
+
+
+[[bin]]
+name = "brickpack-2022"
+path = "src/main.rs"
+
+
+[dependencies]
+anyhow = "1.0.58"
+clap = { version = "3.2.8", features = ["cargo", "env"] }
+dotenv = "0.15.0"
+tokio = { version = "1.19.2", features = ["full", "tracing"] }
+
+web-server = { path = "../web-server" }

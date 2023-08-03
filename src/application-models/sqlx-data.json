@@ -1,0 +1,739 @@
+{
+  "db": "SQLite",
+  "05e25ff0ef7be860b457b8594adaeaed132fed85b7732c774594d8ba49fe81ba": {
+    "query": "\n                UPDATE `statuses`\n                SET name = ?1\n                WHERE oid = ?2\n             ;\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": []
+    }
+  },
+  "0aaa92a627e4ade727edfb29251ff0a26acfcc7cf7691030b0efd15e1147922b": {
+    "query": "\n            SELECT oid, name, created_at, updated_at\n            FROM `statuses`\n            WHERE is_deleted = 0 AND oid = ?1;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "oid",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 2,
+          "type_info": "Datetime"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 3,
+          "type_info": "Datetime"
+        }
+      ],
+      "parameters": {
+        "Right": 1
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "198414251854a8bba5876e939b05bf454d4f5ee6b0018923a4d981dbfaae84be": {
+    "query": "\n                UPDATE `users`\n                SET name = ?1\n                WHERE id = ?2\n             ;\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": []
+    }
+  },
+  "1c4658165676a3f155ec5321b715168f22d304793db7459726f3f063eaf211d6": {
+    "query": "\n            INSERT INTO `users`\n            (\"oid\",\"name\",\"email\",\"department\",\"permission\",\"status\",\"created_at\",\"updated_at\",\"is_deleted\")\n            VALUES (?1,?2,?3,?4,?5,?6,?7,?8,0);\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 8
+      },
+      "nullable": []
+    }
+  },
+  "216d6ee137ab644dd35c782048fe30a650456c2f34f165e46a8aa85df5c8c518": {
+    "query": "\n            SELECT COUNT(*) as count FROM `users` WHERE is_deleted = 0;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "count",
+          "ordinal": 0,
+          "type_info": "Int"
+        }
+      ],
+      "parameters": {
+        "Right": 0
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "270ef3f3d6f25155ac204d4401b71c46528b9bebc450f5cb8f5343ae26bd03cd": {
+    "query": "\n                INSERT INTO `applets` (\"oid\",\"filename\",\"code\",\"size\",\"created_at\",\"updated_at\",\"is_deleted\")\n                    VALUES (\n                        ?1,\n                        \"fibonacci.lua\",\n                        \"ZnVuY3Rpb24gZmliKG4pCiAgICBpZiBuIDwgMiAKICAgICAgICB0aGVuIHJldHVybiAxIAogICAgICAgIGVsc2UgcmV0dXJuIGZpYihuLTIpICsgZmliKG4tMSkKICAgIGVuZAplbmQKCgpmdW5jdGlvbiBtYWluKCkKICAgIGxvY2FsIHggPSAxMAogICAgZWNobygiPGgxPkZpYm9uYWNjaTwvaDE+IikKICAgIGVjaG8oIjxwPkZpYm9uYWNjaSA8c3Ryb25nPigiKQogICAgbG9jYWwgb3V0cHV0ID0gdG9zdHJpbmcoeCkKICAgIGVjaG8ob3V0cHV0KQogICAgZWNobygiKTwvc3Ryb25nPjwvcD4iKQogICAgZWNobygiPGhyLz4iKQogICAgbG9jYWwgcmVzdWx0PWZpYih4KQogICAgZWNobygiPHA+PHN0cm9uZz5SZXN1bHQ6PC9zdHJvbmc+PHNwYW4gc3R5bGU9XCJjb2xvcjogcmVkO1wiPiIpCiAgICBsb2NhbCBvdXRwdXQgPSB0b3N0cmluZyhyZXN1bHQpCiAgICBlY2hvKG91dHB1dCkKICAgIGVjaG8oIjwvc3Bhbj48L3A+IikKZW5kCgoKbWFpbigpCg==\",\n                        644,\n                        ?2,\n                        ?3,\n                        0\n                    );\n\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 3
+      },
+      "nullable": []
+    }
+  },
+  "2d238a7b82bbd84f65db69109d35a5a46a73a365444e10f277a4905a980ff4bc": {
+    "query": "\n            SELECT oid, name, created_at, updated_at\n            FROM `departments`\n            WHERE is_deleted = 0 LIMIT ?1 OFFSET ?2;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "oid",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 2,
+          "type_info": "Datetime"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 3,
+          "type_info": "Datetime"
+        }
+      ],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "311b3ff22a18773dd7eb8a17755050b1e7f31aa8bf3fe7301f014566de7e04fe": {
+    "query": "\n            UPDATE `applets`\n            SET is_deleted = 1\n            WHERE is_deleted = 0 AND oid = ?1;\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 1
+      },
+      "nullable": []
+    }
+  },
+  "3211164917dfa2e07e41ee1c9c0b90d582d801439a688aa0b835bda8240e440b": {
+    "query": "\n            SELECT oid, filename, code, size, created_at, updated_at FROM `applets` WHERE is_deleted = 0 AND oid = ?1;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "oid",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "filename",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "code",
+          "ordinal": 2,
+          "type_info": "Text"
+        },
+        {
+          "name": "size",
+          "ordinal": 3,
+          "type_info": "Int64"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 4,
+          "type_info": "Datetime"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 5,
+          "type_info": "Datetime"
+        }
+      ],
+      "parameters": {
+        "Right": 1
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "4e370f615fe33a32251b21745dfbe15b3562bbcaf1c9d508c74f31390642da0c": {
+    "query": "\n            INSERT INTO `statuses` (\"oid\",\"name\",\"created_at\",\"updated_at\",\"is_deleted\")\n            VALUES (?1,?2,?3,?4,0);\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 4
+      },
+      "nullable": []
+    }
+  },
+  "5d55a50555cf0336d45d68b7b8531f4cf56cd5031acab69b730a80f268df1c22": {
+    "query": "\n                UPDATE `users`\n                SET status = ?1\n                WHERE oid = ?2\n             ;\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": []
+    }
+  },
+  "62e922fa60b224f2546955587c3b698f0356ddc8c8f1e8a91a7d952354347139": {
+    "query": "\n            SELECT COUNT(*) as count FROM `departments` WHERE is_deleted = 0;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "count",
+          "ordinal": 0,
+          "type_info": "Int"
+        }
+      ],
+      "parameters": {
+        "Right": 0
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "6bbf51c47a8b310846fc015dba1cdc46b4b89f578d3d1e6ed633f0ec4f634a4e": {
+    "query": "\n            UPDATE `users`\n            SET is_deleted = 1\n            WHERE is_deleted = 0 AND oid = ?1;\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 1
+      },
+      "nullable": []
+    }
+  },
+  "6c9ae7d1529fe52d502ae16e579a142ec6399278eb6a713db72dacba1c7d361f": {
+    "query": "\n            UPDATE `statuses`\n            SET is_deleted = 1\n            WHERE is_deleted = 0 AND oid = ?1;\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 1
+      },
+      "nullable": []
+    }
+  },
+  "74719d010d43f6fa9609833f0bcdc4a60463174d87637a490326081777b11a8c": {
+    "query": "\n            SELECT oid, email, name, department, permission, status, created_at, updated_at\n            FROM `users`\n            WHERE is_deleted = 0 AND oid = ?1;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "oid",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "email",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 2,
+          "type_info": "Text"
+        },
+        {
+          "name": "department",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "permission",
+          "ordinal": 4,
+          "type_info": "Text"
+        },
+        {
+          "name": "status",
+          "ordinal": 5,
+          "type_info": "Text"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 6,
+          "type_info": "Datetime"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 7,
+          "type_info": "Datetime"
+        }
+      ],
+      "parameters": {
+        "Right": 1
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "7b7fdc8690b2516389b2137a170d2a48db2beccf9132b2a7bebde717de2f3379": {
+    "query": "\n                UPDATE `permissions`\n                SET name = ?1\n                WHERE oid = ?2\n             ;\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": []
+    }
+  },
+  "7bbea32253826d34a60406879f49100519d13daa7975a6e56c3d0547cd41fec7": {
+    "query": "\n            SELECT oid, name, created_at, updated_at\n            FROM `statuses`\n            WHERE is_deleted = 0 LIMIT ?1 OFFSET ?2;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "oid",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 2,
+          "type_info": "Datetime"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 3,
+          "type_info": "Datetime"
+        }
+      ],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "7db475de2f9c6eaa504e45a14d6da8ba09574d0d041490b599c6f5a0e2f4a65e": {
+    "query": "\n                UPDATE `users`\n                SET permission = ?1\n                WHERE oid = ?2\n             ;\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": []
+    }
+  },
+  "8312f921b122aee6b5ee2c3446b7c3eb5b5e9e002405e5ecc8361930646c9be5": {
+    "query": "\n            INSERT INTO `departments` (\"oid\",\"name\",\"created_at\",\"updated_at\",\"is_deleted\")\n            VALUES (?1,?2,?3,?4,0);\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 4
+      },
+      "nullable": []
+    }
+  },
+  "8a36b86162cdeafd3bda56dce3d5235df1cfd503bcd4a9bd26d853a41db843f6": {
+    "query": "\n                UPDATE `applets`\n                SET code = ?2, size = ?3, updated_at = ?4\n                WHERE oid = ?1\n             ;\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 4
+      },
+      "nullable": []
+    }
+  },
+  "92ce10fa3bd6b6e02dea81b83121d17fe7581005c97a986ee3c41c821fc813e6": {
+    "query": "\n                UPDATE `users`\n                SET department = ?1\n                WHERE oid = ?2\n             ;\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": []
+    }
+  },
+  "9d72d2c9ea0ed4931c3d38440b61887626ce69dbac57edfdf78d4ecb9e89f12e": {
+    "query": "\n                UPDATE `applets`\n                SET filename = ?2, updated_at = ?3\n                WHERE oid = ?1\n             ;\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 3
+      },
+      "nullable": []
+    }
+  },
+  "a6470e6848eb5ce38cd6f0d76c35037192666b2cbed2f24e8073919136798433": {
+    "query": "\n            SELECT oid, name, created_at, updated_at \n            FROM `departments`\n            WHERE is_deleted = 0 AND oid = ?1;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "oid",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 2,
+          "type_info": "Datetime"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 3,
+          "type_info": "Datetime"
+        }
+      ],
+      "parameters": {
+        "Right": 1
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "a71cd88d2a4111b105e62f2768f61ebdfd0741d595f3306fa4e4c93a70482660": {
+    "query": "\n            SELECT oid, filename, size, created_at, updated_at\n            FROM `applets`\n            WHERE is_deleted = 0 LIMIT ?1 OFFSET ?2;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "oid",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "filename",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "size",
+          "ordinal": 2,
+          "type_info": "Int64"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 3,
+          "type_info": "Datetime"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 4,
+          "type_info": "Datetime"
+        }
+      ],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "afede5a3fb223d3a5325e31d6297e43eafcac32827d5a505af15b50cb8b0f851": {
+    "query": "\n            SELECT COUNT(*) as count FROM `statuses` WHERE is_deleted = 0;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "count",
+          "ordinal": 0,
+          "type_info": "Int"
+        }
+      ],
+      "parameters": {
+        "Right": 0
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "b0b719f0eacc539e359d51b27998ed6c268333e391812cf6f826eec6909af340": {
+    "query": "\n                UPDATE `users`\n                SET email = ?1\n                WHERE oid = ?2\n             ;\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": []
+    }
+  },
+  "b20a69b4d51acc66f107be1da2a504d3d5982ec703925b0491344399ebac97bf": {
+    "query": "\n            SELECT oid, name, created_at, updated_at\n            FROM `permissions` WHERE is_deleted = 0 AND oid = ?1;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "oid",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 2,
+          "type_info": "Datetime"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 3,
+          "type_info": "Datetime"
+        }
+      ],
+      "parameters": {
+        "Right": 1
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "bda7aab92d12ccad3d0bb1e2636ea11dd1a6f0d307f85a4767d4ef9c8cb789f7": {
+    "query": "\n            SELECT oid, email, name, department, permission, status, created_at, updated_at\n            FROM `users`\n            WHERE is_deleted = 0 LIMIT ?1 OFFSET ?2;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "oid",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "email",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 2,
+          "type_info": "Text"
+        },
+        {
+          "name": "department",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "permission",
+          "ordinal": 4,
+          "type_info": "Text"
+        },
+        {
+          "name": "status",
+          "ordinal": 5,
+          "type_info": "Text"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 6,
+          "type_info": "Datetime"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 7,
+          "type_info": "Datetime"
+        }
+      ],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "c004af50dee0a9e37907bd10cf8312a44eb7d84f0dfd3a173a79b5bf169f7cf6": {
+    "query": "\n            INSERT INTO `permissions` (\"oid\",\"name\",\"created_at\",\"updated_at\",\"is_deleted\")\n            VALUES (?1,?2,?3,?4,0);\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 4
+      },
+      "nullable": []
+    }
+  },
+  "cfc18350ad2ba29c2f47dfffb2feff05342d12e5b8e79cb78c0db28275a004a7": {
+    "query": "\n                INSERT INTO `applets` (\"oid\",\"filename\",\"code\",\"size\",\"created_at\",\"updated_at\",\"is_deleted\")\n                    VALUES (\n                        ?1,\n                        \"hello.lua\",\n                        \"ZWNobygiPHN0cm9uZz5IZWxsbzwvc3Ryb25nPiB3b3JsZCEiKQ==\",\n                        52,\n                        ?2,\n                        ?3,\n                        0\n                    );\n                    ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 3
+      },
+      "nullable": []
+    }
+  },
+  "cfda5a3c342eff10ddd4677ff1321052e89f8ad6d39fb4347a6e6eda14b6b786": {
+    "query": "\n            UPDATE `departments`\n            SET is_deleted = 1\n            WHERE is_deleted = 0 AND id = ?1;\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 1
+      },
+      "nullable": []
+    }
+  },
+  "d76dfefb5cdb8f6d1a49bbf9ef6a946482588892d76f6b36fa5e84c2e52ca81b": {
+    "query": "\n            INSERT INTO `applets` (\"oid\",\"filename\",\"code\",\"size\",\"created_at\",\"updated_at\",\"is_deleted\")\n            VALUES (?1,?2,?3,?4,?5,?6,0);\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 6
+      },
+      "nullable": []
+    }
+  },
+  "e48a94ea1af70f7313f9c4150a2175a636e266d9e1fbcecdd26ad3e1d0100977": {
+    "query": "\n            UPDATE `permissions`\n            SET is_deleted = 1\n            WHERE is_deleted = 0 AND id = ?1;\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 1
+      },
+      "nullable": []
+    }
+  },
+  "e5cdcf36318d24daf682a2e9d67dec7f2d19f2f9727bd9d3a86ae3bc890c5c95": {
+    "query": "\n            SELECT oid, name, created_at, updated_at\n            FROM `permissions`\n            WHERE is_deleted = 0 LIMIT ?1 OFFSET ?2;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "oid",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 2,
+          "type_info": "Datetime"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 3,
+          "type_info": "Datetime"
+        }
+      ],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "ea5650d48d09e28650820853894e4c2899389ecf41a0207c1163164f6b777471": {
+    "query": "\n                UPDATE `departments`\n                SET name = ?1\n                WHERE oid = ?2\n             ;\n            ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Right": 2
+      },
+      "nullable": []
+    }
+  },
+  "f5a7b8b71d7af47bb4e0757e7f90ac513b65ddc6e8ce901b2e7ce479e65e234d": {
+    "query": "\n            SELECT COUNT(*) as count FROM `applets` WHERE is_deleted = 0;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "count",
+          "ordinal": 0,
+          "type_info": "Int"
+        }
+      ],
+      "parameters": {
+        "Right": 0
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "f8b66c187cba2951dee1fe32656a74b42819d2f6238c59ece2300565ba744dba": {
+    "query": "\n            SELECT COUNT(*) as count FROM `permissions` WHERE is_deleted = 0;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "name": "count",
+          "ordinal": 0,
+          "type_info": "Int"
+        }
+      ],
+      "parameters": {
+        "Right": 0
+      },
+      "nullable": [
+        false
+      ]
+    }
+  }
+}
