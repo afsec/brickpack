@@ -4,6 +4,8 @@ TARGET_PATH:="/target/x86_64-unknown-linux-musl"
 PROGRAM:= "brickpack-2023"
 DIST_DIR:= "./dist"
 
+ARCH = `arch`
+
 STIME = date '+%s' > /tmp/brickpack_$@_time
 ETIME = read st < /tmp/brickpack_$@_time ; echo $$((`date '+%s'`-$$st)) secs
 
@@ -61,7 +63,7 @@ release: rel-post-build
 rel-build: pre-build
 	cargo fmt -- --check
 	@[ -d $(DIST_DIR)/release ] && true || mkdir -vp $(DIST_DIR)/release
-	cargo build --release
+	cargo build --release --target $(ARCH)-unknown-linux-musl 
 
 rel-post-build: rel-build
 	@cp -v .$(TARGET_PATH)/release/$(PROGRAM) $(DIST_DIR)/release/
