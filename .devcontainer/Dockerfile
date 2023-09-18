@@ -14,14 +14,14 @@ RUN apt -yq update && \
     tree iproute2
 
 
-RUN npm install -g npm@latest http-server uglify-js
+# RUN npm install -g npm@latest http-server uglify-js
 
-COPY .devcontainer/install_tooling.sh /usr/local/bin/
+# COPY .devcontainer/install_tooling.sh /usr/local/bin/
 
 WORKDIR /usr/local/bin
 
 # Install Dev Tooling
-RUN sh ./install_tooling.sh
+# RUN sh ./install_tooling.sh
 
 ENV RUSTUP_HOME=/opt/rustup
 ENV CARGO_HOME=/opt/cargo
